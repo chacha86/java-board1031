@@ -6,14 +6,38 @@ public class Article {
 	private String title;
 	private String body;
 	private String regDate;
+	private int hit;
+	private String writer;
 	
-	public Article(int id, String title, String body, String regDate) {
+	public Article(int id, String title, String body, String regDate, int hit, String writer) {
 		this.id = id;
 		this.title = title;
 		this.body = body;
 		this.regDate = regDate;
+		this.hit = hit;
+		this.writer = writer;
 	}
 	
+	public String getWriter() {
+		return writer;
+	}
+
+
+
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
+
+
+
+	public int getHit() {
+		return hit;
+	}
+
+	public void setHit(int hit) {
+		this.hit = hit;
+	}
+
 	public String getRegDate() {
 		return regDate;
 	}
