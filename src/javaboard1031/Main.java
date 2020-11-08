@@ -29,7 +29,15 @@ public class Main {
 
 		Scanner sc = new Scanner(System.in);
 
-		int id = 1;
+		int id = 4;
+		
+		Article a1 = new Article(1, "제목1", "내용1");
+		Article a2 = new Article(2, "제목2", "내용2");
+		Article a3 = new Article(3, "제목3", "내용3");
+		
+		articles.add(a1);
+		articles.add(a2);
+		articles.add(a3);
 
 		while (true) {
 			System.out.print("명령어를 입력해주세요 : ");
