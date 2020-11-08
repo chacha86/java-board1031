@@ -1,6 +1,8 @@
 package javaboard1031;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
@@ -8,7 +10,6 @@ public class Main {
 	static ArrayList<Article> articles = new ArrayList<>();
 
 	public static int getArticleIndexById(int aid) {
-		ArrayList<Article> articles = new ArrayList<>();
 
 		int existFlag = 1; // 1 없다, 2 있다.
 		int index = -1; // -1 없다.
@@ -26,14 +27,17 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-
 		Scanner sc = new Scanner(System.in);
 
 		int id = 4;
 		
-		Article a1 = new Article(1, "제목1", "내용1");
-		Article a2 = new Article(2, "제목2", "내용2");
-		Article a3 = new Article(3, "제목3", "내용3");
+		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy.MM.dd");
+		Date time = new Date();		
+		String time1 = format1.format(time);
+		
+		Article a1 = new Article(1, "제목1", "내용1", time1);
+		Article a2 = new Article(2, "제목2", "내용2", time1);
+		Article a3 = new Article(3, "제목3", "내용3", time1);
 		
 		articles.add(a1);
 		articles.add(a2);
@@ -55,7 +59,7 @@ public class Main {
 				String body = sc.nextLine();
 				System.out.println("게시물이 등록되었습니다.");
 
-				Article article1 = new Article(id, title, body);
+				Article article1 = new Article(id, title, body, time1);
 				articles.add(article1);
 				id++;
 
@@ -82,8 +86,9 @@ public class Main {
 					String title = sc.nextLine();
 					System.out.print("내용 : ");
 					String body = sc.nextLine();
-
-					Article article2 = new Article(targetId, title, body);
+					
+					// 수정 필요
+					Article article2 = new Article(targetId, title, body, time1);
 
 					articles.set(index, article2);
 				}
@@ -102,6 +107,24 @@ public class Main {
 					System.out.println("삭제가 완료되었습니다.");
 				}
 
+			}
+			if(cmd.equals("read")) {
+				System.out.print("상세보기할 게시물 번호 : ");
+				String aid = sc.nextLine();
+				int targetId = Integer.parseInt(aid);
+				int index = getArticleIndexById(targetId);
+				
+				if(index == -1) {
+					System.out.println("없는 게시물입니다.");
+				} else {
+					
+					Article article = articles.get(index);
+					System.out.println("번호 : " + article.getId());
+					System.out.println("제목 : " + article.getTitle());
+					System.out.println("내용 : " + article.getBody());
+					System.out.println("등록날짜 : " + article.getRegDate());
+					System.out.println("======================");
+				}
 			}
 		}
 	}

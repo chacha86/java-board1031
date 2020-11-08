@@ -1,20 +1,19 @@
 package javaboard1031;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Test {
 
 	public static void main(String[] args) {
 		
-		String s = "11";
-		
-		System.out.println(s + 10);
-		
-		int a = Integer.parseInt(s);
-		
-		System.out.println(a);
-		System.out.println(a + 10);
-		
+		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy.MM.dd");
+				
+		Date time = new Date();		
+				
+		String time1 = format1.format(time);
+						
+		System.out.println(time1);
 		
 			
 	}
