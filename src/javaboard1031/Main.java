@@ -135,7 +135,27 @@ public class Main {
 					System.out.println("작성자 : " + article.getWriter());
 					System.out.println("======================");
 				}
-			}			
+			}
+			
+			if(cmd.equals("search")) {
+				System.out.print("검색 키워드를 입력해주세요 : ");
+				String keyword = sc.nextLine();
+				
+				for (int i = 0; i < articles.size(); i++) {
+					Article article = articles.get(i);
+					String targetStr = article.getTitle();
+					
+					if(targetStr.contains(keyword)) {
+						System.out.println("번호 : " + article.getId());
+						System.out.println("제목 : " + article.getTitle());
+						System.out.println("등록날짜 : " + article.getRegDate());
+						System.out.println("조회수 : " + article.getHit());
+						System.out.println("작성자 : " + article.getWriter());
+						System.out.println("===================");
+					}
+				}
+			}
+			
 		}
 	}
 }
