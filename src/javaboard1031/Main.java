@@ -138,12 +138,24 @@ public class Main {
 			}
 			
 			if(cmd.equals("search")) {
+				System.out.println("검색 항목을 선택해주세요 (1. 제목, 2. 내용, 3. 제목 + 내용, 4. 작성자) : ");
+				int searchTarget = Integer.parseInt(sc.nextLine());
+				
 				System.out.print("검색 키워드를 입력해주세요 : ");
 				String keyword = sc.nextLine();
 				
 				for (int i = 0; i < articles.size(); i++) {
 					Article article = articles.get(i);
-					String targetStr = article.getTitle();
+					String targetStr = "";
+					if(searchTarget == 1) {
+						targetStr = article.getTitle();
+					} else if(searchTarget == 2) {
+						targetStr = article.getBody();
+					} else if(searchTarget == 3) {
+						targetStr = article.getTitle() + article.getBody();
+					} else {
+						targetStr = article.getWriter();
+					}
 					
 					if(targetStr.contains(keyword)) {
 						System.out.println("번호 : " + article.getId());
@@ -155,7 +167,6 @@ public class Main {
 					}
 				}
 			}
-			
 		}
 	}
 }
