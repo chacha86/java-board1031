@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
+import testtest.Reply;
+
 public class Main {
 
 	static ArrayList<Article> articles = new ArrayList<>();
@@ -134,6 +136,22 @@ public class Main {
 					System.out.println("조회수 : " + article.getHit());
 					System.out.println("작성자 : " + article.getWriter());
 					System.out.println("======================");
+					
+					while(true) {
+						System.out.print("상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 좋아요, 3. 수정, 4. 삭제, 5. 목록으로) : ");
+						int rCmdNo = Integer.parseInt(sc.nextLine());
+						
+						if(rCmdNo == 1) {
+							System.out.println("[댓글 기능]");
+						} else if(rCmdNo == 2) {
+							System.out.println("[좋아요 기능]");
+						} else if(rCmdNo == 3) {
+							System.out.println("[수정 기능]");
+						} else if(rCmdNo == 4) {
+							System.out.println("[삭제 기능]");
+						} else if(rCmdNo == 5) {
+							break;
+						}
 				}
 			}
 			
