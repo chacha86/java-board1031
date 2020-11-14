@@ -5,11 +5,28 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-import testtest.Reply;
-
 public class Main {
 
 	static ArrayList<Article> articles = new ArrayList<>();
+	static ArrayList<Reply> replies = new ArrayList<>();
+
+	public static void printArticle(Article article) {
+		
+		System.out.println("번호 : " + article.getId());
+		System.out.println("제목 : " + article.getTitle());
+		System.out.println("내용 : " + article.getBody());
+		System.out.println("등록날짜 : " + article.getRegDate());
+		System.out.println("조회수 : " + article.getHit());
+		System.out.println("작성자 : " + article.getWriter());
+		System.out.println("======================");
+		System.out.println("--------- 댓글 --------");
+		for(int i = 0; i < replies.size(); i++) {
+			Reply re = replies.get(i);
+			if(re.getParentId() == article.getId()) {
+				System.out.println("내용 : " + re.getBody());				
+			}
+		}
+	}
 	
 	public static int getArticleIndexById(int aid) {
 
@@ -129,20 +146,23 @@ public class Main {
 					int targetHit = article.getHit();
 					article.setHit(targetHit + 1);
 					
-					System.out.println("번호 : " + article.getId());
-					System.out.println("제목 : " + article.getTitle());
-					System.out.println("내용 : " + article.getBody());
-					System.out.println("등록날짜 : " + article.getRegDate());
-					System.out.println("조회수 : " + article.getHit());
-					System.out.println("작성자 : " + article.getWriter());
-					System.out.println("======================");
+					printArticle(article);
 					
 					while(true) {
 						System.out.print("상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 좋아요, 3. 수정, 4. 삭제, 5. 목록으로) : ");
 						int rCmdNo = Integer.parseInt(sc.nextLine());
 						
 						if(rCmdNo == 1) {
-							System.out.println("[댓글 기능]");
+							
+							System.out.print("댓글 내용을 입력해주세요 : ");
+							String replyBody = sc.nextLine();
+							Reply re = new Reply(article.getId(), replyBody, "익명", time1);
+							
+							replies.add(re);
+							System.out.println("댓글이 등록되었습니다.");
+							
+							printArticle(article);
+							
 						} else if(rCmdNo == 2) {
 							System.out.println("[좋아요 기능]");
 						} else if(rCmdNo == 3) {
@@ -152,10 +172,12 @@ public class Main {
 						} else if(rCmdNo == 5) {
 							break;
 						}
+					}
 				}
 			}
 			
 			if(cmd.equals("search")) {
+				
 				System.out.println("검색 항목을 선택해주세요 (1. 제목, 2. 내용, 3. 제목 + 내용, 4. 작성자) : ");
 				int searchTarget = Integer.parseInt(sc.nextLine());
 				
@@ -185,6 +207,7 @@ public class Main {
 					}
 				}
 			}
+			
 		}
 	}
 }
