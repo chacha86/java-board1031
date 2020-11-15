@@ -6,6 +6,13 @@ public class Reply {
 	private String wirter; // 댓글 작성자
 	private String regDate; // 댓글 작성일
 	
+	public Reply(int parentId, String body, String wirter) {
+		super();
+		this.parentId = parentId;
+		this.body = body;
+		this.wirter = wirter;
+	}
+	
 	public Reply(int parentId, String body, String wirter, String regDate) {
 		super();
 		this.parentId = parentId;

@@ -1,16 +1,13 @@
 package javaboard1031;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
 
-	static ArrayList<Article> articles = new ArrayList<>();
-	static ArrayList<Reply> replies = new ArrayList<>();
 	static ArrayList<Member> members = new ArrayList<>();
-
+	static ArticleDao articleDao = new ArticleDao();
+	
 	public static void printArticle(Article article) {
 		
 		System.out.println("번호 : " + article.getId());
@@ -21,6 +18,8 @@ public class Main {
 		System.out.println("작성자 : " + article.getWriter());
 		System.out.println("======================");
 		System.out.println("--------- 댓글 --------");
+		
+		ArrayList<Reply> replies = articleDao.getReplies();
 		for(int i = 0; i < replies.size(); i++) {
 			Reply re = replies.get(i);
 			if(re.getParentId() == article.getId()) {
@@ -28,42 +27,11 @@ public class Main {
 			}
 		}
 	}
-	
-	public static int getArticleIndexById(int aid) {
-
-		int existFlag = 1; // 1 없다, 2 있다.
-		int index = -1; // -1 없다.
-
-		for (int i = 0; i < articles.size(); i++) {
-			Article article = articles.get(i);
-			if (aid == article.getId()) {
-				existFlag = 2;
-				index = i;
-			}
-		}
-
-		return index;
-
-	}
 
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-
-		int id = 4;
-		
-		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy.MM.dd");
-		Date time = new Date();		
-		String time1 = format1.format(time);
-		
-		Article a1 = new Article(1, "안녕하세요", "내용1", time1, 0, "홍길동");
-		Article a2 = new Article(2, "반갑습니다", "내용2", time1, 0, "홍길동");
-		Article a3 = new Article(3, "안녕2", "내용3", time1, 0, "이순신");
-		
-		articles.add(a1);
-		articles.add(a2);
-		articles.add(a3);
-		
+		Scanner sc = new Scanner(System.in);		
 		Member loginedMember = null;
+		
 		
 		while (true) {
 			if(loginedMember == null) {
@@ -85,12 +53,14 @@ public class Main {
 				String body = sc.nextLine();
 				System.out.println("게시물이 등록되었습니다.");
 
-				Article article1 = new Article(id, title, body, time1, 0,  "익명");
-				articles.add(article1);
-				id++;
+				Article article1 = new Article(title, body, 0,  "익명");
+				
+				articleDao.addArticle(article1);
+				
 
 			}
 			if (cmd.equals("list")) {
+				ArrayList<Article> articles = articleDao.getArticles();
 				for (int i = 0; i < articles.size(); i++) {
 					Article article = articles.get(i);
 					System.out.println("번호 : " + article.getId());
@@ -106,22 +76,16 @@ public class Main {
 				System.out.print("수정할 게시물 번호 : ");
 				String aid = sc.nextLine();
 				int targetId = Integer.parseInt(aid);
-				int index = getArticleIndexById(targetId);
-
-				if (index == -1) {
-					System.out.println("없는 게시물입니다.");
-				} else {
-					System.out.print("제목 : ");
-					String title = sc.nextLine();
-					System.out.print("내용 : ");
-					String body = sc.nextLine();
-					
-					// 수정 필요 -> 
-					Article article2 = articles.get(index);
-					article2.setTitle(title);
-					article2.setBody(body);
-
-					articles.set(index, article2);
+				
+				System.out.print("제목 : ");
+				String title = sc.nextLine();
+				System.out.print("내용 : ");
+				String body = sc.nextLine();
+				
+				boolean rst = articleDao.updateArticle(targetId, title, body);
+				
+				if(!rst) {
+					System.out.println("없는 게시물 번호입니다.");
 				}
 
 			}
@@ -130,26 +94,22 @@ public class Main {
 				System.out.print("삭제할 게시물 번호 : ");
 				String aid = sc.nextLine();
 				int targetId = Integer.parseInt(aid);
-				int index = getArticleIndexById(targetId);
-				if (index == -1) {
-					System.out.println("없는 게시물입니다.");
-				} else {
-					articles.remove(index);
-					System.out.println("삭제가 완료되었습니다.");
+				boolean rst = articleDao.deleteArticle(targetId);
+				if(!rst) {
+					System.out.println("없는 게시물 번호입니다.");
 				}
-
 			}
 			if(cmd.equals("read")) {
 				System.out.print("상세보기할 게시물 번호 : ");
 				String aid = sc.nextLine();
 				int targetId = Integer.parseInt(aid);
-				int index = getArticleIndexById(targetId);
 				
-				if(index == -1) {
+				Article article = articleDao.getArticleById(targetId);
+				
+				if(article == null) {
 					System.out.println("없는 게시물입니다.");
 				} else {
 					
-					Article article = articles.get(index);
 					int targetHit = article.getHit();
 					article.setHit(targetHit + 1);
 					
@@ -163,9 +123,9 @@ public class Main {
 							
 							System.out.print("댓글 내용을 입력해주세요 : ");
 							String replyBody = sc.nextLine();
-							Reply re = new Reply(article.getId(), replyBody, "익명", time1);
+							Reply re = new Reply(article.getId(), replyBody, "익명");
 							
-							replies.add(re);
+							articleDao.addReply(re);
 							System.out.println("댓글이 등록되었습니다.");
 							
 							printArticle(article);
@@ -190,6 +150,8 @@ public class Main {
 				
 				System.out.print("검색 키워드를 입력해주세요 : ");
 				String keyword = sc.nextLine();
+				
+				ArrayList<Article> articles = articleDao.getArticles();
 				
 				for (int i = 0; i < articles.size(); i++) {
 					Article article = articles.get(i);
