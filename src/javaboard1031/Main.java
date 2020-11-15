@@ -63,14 +63,8 @@ public class Main {
 		articles.add(a2);
 		articles.add(a3);
 		
-		Member loginedMember = null;
-		
 		while (true) {
-			if(loginedMember == null) {
-				System.out.print("명령어를 입력해주세요 : ");				
-			} else {
-				System.out.print("명령어를 입력해주세요 [" + loginedMember.getLoginId() + "(" + loginedMember.getNickname() + ")] : ");				
-			}
+			System.out.print("명령어를 입력해주세요 : ");				
 			String cmd = sc.nextLine();
 			if (cmd.equals("exit")) {
 				System.out.println("종료");
@@ -213,20 +207,6 @@ public class Main {
 						System.out.println("===================");
 					}
 				}
-			}
-			if(cmd.equals("signup")) {
-				System.out.println("==== 회원 가입을 진행합니다 ====");
-				System.out.print("아이디를 입력해주세요 : ");
-				String loginId = sc.nextLine();
-				System.out.print("비밀번호를 입력해주세요 : ");
-				String loginPw = sc.nextLine();
-				System.out.print("닉네임을 입력해주세요 : ");
-				String nick = sc.nextLine();
-			
-				Member member = new Member(loginId, loginPw, nick);
-				members.add(member);
-				System.out.println("==== 회원가입이 완료되었습니다. ====");
-				
 			}
 		}
 	}
