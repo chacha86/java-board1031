@@ -208,6 +208,21 @@ public class Main {
 					}
 				}
 			}
+			
+			if(cmd.equals("signup")) {
+				System.out.println("==== 회원 가입을 진행합니다 ====");
+				System.out.print("아이디를 입력해주세요 : ");
+				String loginId = sc.nextLine();
+				System.out.print("비밀번호를 입력해주세요 : ");
+				String loginPw = sc.nextLine();
+				System.out.print("닉네임을 입력해주세요 : ");
+				String nick = sc.nextLine();
+			
+				Member member = new Member(loginId, loginPw, nick);
+				members.add(member);
+				System.out.println("==== 회원가입이 완료되었습니다. ====");
+				
+			}
 		}
 	}
 }
