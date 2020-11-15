@@ -63,8 +63,14 @@ public class Main {
 		articles.add(a2);
 		articles.add(a3);
 		
+		Member loginedMember = null;
+		
 		while (true) {
-			System.out.print("명령어를 입력해주세요 : ");				
+			if(loginedMember == null) {
+				System.out.print("명령어를 입력해주세요 : ");				
+			} else {
+				System.out.print("명령어를 입력해주세요 [" + loginedMember.getLoginId() + "(" + loginedMember.getNickname() + ")] : ");				
+			}
 			String cmd = sc.nextLine();
 			if (cmd.equals("exit")) {
 				System.out.println("종료");
@@ -208,7 +214,6 @@ public class Main {
 					}
 				}
 			}
-			
 			if(cmd.equals("signup")) {
 				System.out.println("==== 회원 가입을 진행합니다 ====");
 				System.out.print("아이디를 입력해주세요 : ");
@@ -221,6 +226,34 @@ public class Main {
 				Member member = new Member(loginId, loginPw, nick);
 				members.add(member);
 				System.out.println("==== 회원가입이 완료되었습니다. ====");
+				
+			}
+			if(cmd.equals("signin")) {
+				System.out.print("아이디 : ");
+				String loginId = sc.nextLine();
+				System.out.print("비밀번호 : ");
+				String loginPw = sc.nextLine();
+				
+				boolean loginFlag = false; // 로그인 성공 여부
+				Member member = null;
+				
+				for(int i = 0; i < members.size(); i++) {
+					member = members.get(i);
+					String targetId = member.getLoginId();
+					String targetPw = member.getLoginPw();
+					
+					if(loginId.equals(targetId) && loginPw.equals(targetPw)) {
+						loginFlag = true;
+						break;
+					} 
+				}
+				// 로그인 처리
+				if(loginFlag) {
+					loginedMember = member;
+					System.out.println(member.getNickname() + "님 반갑습니다.!");
+				} else {
+					System.out.println("비밀번호를 틀렸거나 잘못된 회원정보입니다.");
+				}
 				
 			}
 		}
