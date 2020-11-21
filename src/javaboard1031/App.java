@@ -8,14 +8,17 @@ public class App {
 	ArrayList<Member> members = new ArrayList<>();
 	ArticleController ac = new ArticleController();
 	MemberController mc = new MemberController();
-	
 	Scanner sc = new Scanner(System.in);
-
+	
+	
 	public void start() {
-		Scanner sc = new Scanner(System.in);
-		Member loginedMember = null;
-
+		Scanner sc = new Scanner(System.in);	
+		
 		while (true) {
+			
+			Member loginedMember = mc.getLoginedMember();
+			ac.setLoginedMember(loginedMember);
+			
 			if (loginedMember == null) {
 				System.out.print("명령어를 입력해주세요 : ");
 			} else {
@@ -23,34 +26,26 @@ public class App {
 						"명령어를 입력해주세요 [" + loginedMember.getLoginId() + "(" + loginedMember.getNickname() + ")] : ");
 			}
 			String cmd = sc.nextLine();
+			
 			if (cmd.equals("exit")) {
 				System.out.println("종료");
 				break;
 			}
-			if (cmd.equals("add")) {
-				ac.addArticle();
+			
+			String[] cmdBits = cmd.split(" ");
+			
+			if(cmdBits.length < 2) {
+				System.out.println("잘못된 명령어입니다.");
+				continue;
 			}
-			if (cmd.equals("list")) {
-				ac.printArticleList();
+			String module = cmdBits[0]; // article
+		    String func = cmdBits[1]; // list add
+		    
+			if(module.equals("article")) {
+				ac.doCommand(func);				
+			} else if(module.equals("member")) {				
+				mc.doCommand(func);
 			}
-			if (cmd.equals("update")) {
-				ac.updateArticle();
-			}
-			if (cmd.equals("delete")) {
-				ac.deleteArticle();
-			}
-			if (cmd.equals("read")) {
-				ac.readArticle();
-			}
-			if (cmd.equals("search")) {
-				ac.searchArticle();
-			}
-			if (cmd.equals("signup")) {
-				mc.memberSignUp();
-			}
-			if (cmd.equals("signin")) {
-				mc.memberSignin();
-			} 
 		}
 	}
 }

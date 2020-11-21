@@ -9,6 +9,19 @@ public class MemberController {
 	Scanner sc = new Scanner(System.in);
 	Member loginedMember = null;
 	
+	public Member getLoginedMember() {
+		return this.loginedMember;
+	}
+	
+	public void doCommand(String cmd) {
+		if (cmd.equals("signup")) {
+			memberSignUp();
+		}
+		if (cmd.equals("signin")) {
+			memberSignin();
+		} 
+	}
+	
 	public void memberSignin() {
 		System.out.print("아이디 : ");
 		String loginId = sc.nextLine();

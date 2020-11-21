@@ -7,6 +7,58 @@ public class ArticleController {
 	
 	ArticleDao articleDao = new ArticleDao();
 	Scanner sc = new Scanner(System.in);
+	Member loginedMember = null;
+	
+	public ArticleController() {
+		articleDao.init();
+	}
+	
+	public void setLoginedMember(Member member) {
+		this.loginedMember = member;
+	}
+	
+	public void doCommand(String cmd) {
+		if (cmd.equals("add")) {
+			
+			// 로그인 체크
+			if(isLogin()) {
+				addArticle();
+			}
+		}
+		if (cmd.equals("list")) {
+			printArticleList();
+		}
+		if (cmd.equals("update")) {
+			updateArticle();
+		}
+		if (cmd.equals("delete")) {
+			deleteArticle();
+		}
+		if (cmd.equals("read")) {
+			readArticle();
+		}
+		if (cmd.equals("search")) {
+			searchArticle();
+		}
+	}
+	
+	public boolean isMyArticle(Article article) {
+		if(article.getWriterId().equals(loginedMember.getLoginId())) {
+			return true;
+		} else {
+			System.out.println("자신의 게시물만 수정/삭제할 수 있습니다.");
+			return false;
+		}
+	}
+	
+	public boolean isLogin() {
+		if(loginedMember == null) {
+			System.out.println("로그인이 필요한 기능입니다.");
+			return false;
+		} else {
+			return true;
+		}
+	}
 	
 	public void searchArticle() {
 
@@ -61,12 +113,37 @@ public class ArticleController {
 			} else if (rCmdNo == 2) {
 				System.out.println("[좋아요 기능]");
 			} else if (rCmdNo == 3) {
-				System.out.println("[수정 기능]");
+				if(isLogin() && isMyArticle(article)) {
+					updateMyArticle(article.getId());					
+				}
 			} else if (rCmdNo == 4) {
-				System.out.println("[삭제 기능]");
+				if(isLogin() && isMyArticle(article)) {					
+					deleteMyArticle(article.getId());
+				}
 			} else if (rCmdNo == 5) {
 				break;
 			}
+		}
+	}
+	
+	public void deleteMyArticle(int targetId) {		
+		boolean rst = articleDao.deleteArticle(targetId);
+		if (!rst) {
+			System.out.println("없는 게시물 번호입니다.");
+		}
+	}
+	
+	public void updateMyArticle(int targetId) {
+		
+		System.out.print("제목 : ");
+		String title = sc.nextLine();
+		System.out.print("내용 : ");
+		String body = sc.nextLine();
+
+		boolean rst = articleDao.updateArticle(targetId, title, body);
+
+		if (!rst) {
+			System.out.println("없는 게시물 번호입니다.");
 		}
 	}
 	
@@ -119,6 +196,8 @@ public class ArticleController {
 	
 	public void printArticleList() {
 		ArrayList<Article> articles = articleDao.getArticles();
+		
+		System.out.println("articles size : " + articles.size());
 		for (int i = 0; i < articles.size(); i++) {
 			Article article = articles.get(i);
 			System.out.println("번호 : " + article.getId());
@@ -137,7 +216,7 @@ public class ArticleController {
 		String body = sc.nextLine();
 		System.out.println("게시물이 등록되었습니다.");
 
-		Article article1 = new Article(title, body, 0, "익명");
+		Article article1 = new Article(title, body, 0, "익명", "test");
 
 		articleDao.addArticle(article1);
 	}
