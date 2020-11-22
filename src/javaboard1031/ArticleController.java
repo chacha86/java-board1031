@@ -100,18 +100,21 @@ public class ArticleController {
 			int rCmdNo = Integer.parseInt(sc.nextLine());
 
 			if (rCmdNo == 1) {
-
-				System.out.print("댓글 내용을 입력해주세요 : ");
-				String replyBody = sc.nextLine();
-				Reply re = new Reply(article.getId(), replyBody, "익명");
-
-				articleDao.addReply(re);
-				System.out.println("댓글이 등록되었습니다.");
-
-				printArticle(article);
+				
+				if(isLogin()) {					
+					System.out.print("댓글 내용을 입력해주세요 : ");
+					String replyBody = sc.nextLine();
+					Reply re = new Reply(article.getId(), replyBody, loginedMember.getNickname(), loginedMember.getLoginId());
+					
+					articleDao.addReply(re);
+					System.out.println("댓글이 등록되었습니다.");
+					
+					printArticle(article);
+				}
 
 			} else if (rCmdNo == 2) {
 				System.out.println("[좋아요 기능]");
+				
 			} else if (rCmdNo == 3) {
 				if(isLogin() && isMyArticle(article)) {
 					updateMyArticle(article.getId());					
@@ -216,7 +219,7 @@ public class ArticleController {
 		String body = sc.nextLine();
 		System.out.println("게시물이 등록되었습니다.");
 
-		Article article1 = new Article(title, body, 0, "익명", "test");
+		Article article1 = new Article(title, body, 0, loginedMember.getNickname(), loginedMember.getLoginId());
 
 		articleDao.addArticle(article1);
 	}
