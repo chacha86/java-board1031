@@ -20,9 +20,9 @@ public class ArticleDao {
 	
 	public void init() {
 		
-		Article a1 = new Article(1, "안녕하세요", "내용1", getCurrentDate(), 0, "홍길동", "test");
-		Article a2 = new Article(2, "반갑습니다", "내용2", getCurrentDate(), 0, "홍길동", "test");
-		Article a3 = new Article(3, "안녕2", "내용3", getCurrentDate(), 0, "이순신", "test");  
+		Article a1 = new Article(1, "안녕하세요", "내용1", getCurrentDate(), 40, "홍길동", "test");
+		Article a2 = new Article(2, "반갑습니다", "내용2", getCurrentDate(), 20, "홍길동", "test");
+		Article a3 = new Article(3, "안녕2", "내용3", getCurrentDate(), 10, "이순신", "test");  
 		
 		articles.add(a1);
 		articles.add(a2);

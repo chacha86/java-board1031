@@ -1,6 +1,8 @@
 package javaboard1031;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class ArticleController {
@@ -26,7 +28,7 @@ public class ArticleController {
 			}
 		}
 		if (cmd.equals("list")) {
-			printArticleList();
+			printArticleList(articleDao.getArticles());
 		}
 		if (cmd.equals("update")) {
 			updateArticle();
@@ -40,6 +42,29 @@ public class ArticleController {
 		if (cmd.equals("search")) {
 			searchArticle();
 		}
+		if (cmd.equals("sort")) {
+			sortArticle();
+		}
+	}
+	
+	public void sortArticle() {
+		System.out.print("정렬 대상을 선택해주세요. (id : 번호, hit : 조회수) : ");
+		String sortTarget = sc.nextLine();
+		System.out.print("정렬 방법을 선택해주세요. (asc : 오름차순, desc : 내림차순) : ");
+		String sortType = sc.nextLine();
+		
+		ArrayList<Article> articles = articleDao.getArticles();
+		
+		MyComp comp = new MyComp();
+		comp.sortTarget = sortTarget;
+		comp.sortType = sortType;
+		
+		
+		Collections.sort(articles, comp);
+		
+		printArticleList(articles);
+		
+		
 	}
 	
 	public boolean isMyArticle(Article article) {
@@ -212,10 +237,8 @@ public class ArticleController {
 
 	}
 	
-	public void printArticleList() {
-		ArrayList<Article> articles = articleDao.getArticles();
-		
-		System.out.println("articles size : " + articles.size());
+	public void printArticleList(ArrayList<Article> articles) {
+	
 		for (int i = 0; i < articles.size(); i++) {
 			Article article = articles.get(i);
 			System.out.println("번호 : " + article.getId());
@@ -259,4 +282,40 @@ public class ArticleController {
 			}
 		}
 	}
+}
+
+class MyComp implements Comparator<Article> {
+	
+	String sortTarget = "hit";
+	String sortType = "asc";
+
+	@Override
+	public int compare(Article a1, Article a2) {
+		if(sortTarget.equals("hit")) {
+			if(sortType.equals("asc")) {
+				if(a1.getHit() > a2.getHit()) {
+					return 1;
+				}
+				return -1;							
+			} else {
+				if(a1.getHit() < a2.getHit()) {
+					return 1;
+				}
+				return -1;
+			}
+		} else {
+			if(sortType.equals("asc")) {
+				if(a1.getId() > a2.getId()) {
+					return 1;
+				}
+				return -1;							
+			} else {
+				if(a1.getId() < a2.getId()) {
+					return 1;
+				}
+				return -1;
+			}
+		}
+	}
+	
 }
