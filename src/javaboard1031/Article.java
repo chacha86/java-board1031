@@ -15,6 +15,7 @@ public class Article {
 		this.body = body;
 		this.hit = hit;
 		this.writer = writer;
+		this.writerId = writerId;
 	}
 	
 	public Article(int id, String title, String body, String regDate, int hit, String writer, String writerId) {

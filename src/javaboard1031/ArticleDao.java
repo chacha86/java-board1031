@@ -7,6 +7,8 @@ import java.util.Date;
 public class ArticleDao {
 	private ArrayList<Article> articles = new ArrayList<>();
 	private ArrayList<Reply> replies = new ArrayList<>();
+	private ArrayList<Like> likes = new ArrayList<>();
+	
 	int id = 4;
 	
 	public String getCurrentDate() {
@@ -25,6 +27,36 @@ public class ArticleDao {
 		articles.add(a1);
 		articles.add(a2);
 		articles.add(a3);
+	}
+	
+	public int getLikeCountByParentId(int parentId) {
+		int cnt = 0;
+		for(int i = 0; i < likes.size(); i++) {
+			if(likes.get(i).getParentId() == parentId) {
+				cnt++;
+			}
+		}
+		
+		return cnt;
+	}
+	
+	public Like getLikeByParentIdAndMemberLoginId(int parentId, String memberLoginId) {
+		for(int i = 0; i < likes.size(); i++) {
+			if(likes.get(i).getParentId() == parentId && likes.get(i).getCheckMemberId().equals(memberLoginId)) {
+				return likes.get(i);
+			}
+		}
+		
+		return null;
+	}
+	
+	public void removeLike(Like like) {
+		likes.remove(like);
+	}
+	
+	public void addLike(Like like) {
+		like.setRegDate(getCurrentDate());
+		likes.add(like);
 	}
 	
 	public void addReply(Reply reply) {

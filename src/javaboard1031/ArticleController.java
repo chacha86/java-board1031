@@ -43,6 +43,8 @@ public class ArticleController {
 	}
 	
 	public boolean isMyArticle(Article article) {
+		System.out.println("article : " + article);
+		System.out.println("loginedMember : " + loginedMember);
 		if(article.getWriterId().equals(loginedMember.getLoginId())) {
 			return true;
 		} else {
@@ -113,8 +115,21 @@ public class ArticleController {
 				}
 
 			} else if (rCmdNo == 2) {
-				System.out.println("[좋아요 기능]");
 				
+				Like like = articleDao.getLikeByParentIdAndMemberLoginId(article.getId(), loginedMember.getLoginId());
+				
+				if(isLogin() && (like == null)) {
+					
+					like = new Like(article.getId(), loginedMember.getLoginId());
+					articleDao.addLike(like);
+					
+					System.out.println("해당 게시물을 좋아합니다.");	
+					printArticle(article);
+				} else {
+					articleDao.removeLike(like);
+					System.out.println("해당 게시물의 좋아요를 해제합니다.");
+					printArticle(article);
+				}
 			} else if (rCmdNo == 3) {
 				if(isLogin() && isMyArticle(article)) {
 					updateMyArticle(article.getId());					
@@ -231,6 +246,7 @@ public class ArticleController {
 		System.out.println("내용 : " + article.getBody());
 		System.out.println("등록날짜 : " + article.getRegDate());
 		System.out.println("조회수 : " + article.getHit());
+		System.out.println("좋아요 : " + articleDao.getLikeCountByParentId(article.getId()));
 		System.out.println("작성자 : " + article.getWriter());
 		System.out.println("======================");
 		System.out.println("--------- 댓글 --------");

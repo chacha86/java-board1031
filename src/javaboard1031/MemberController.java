@@ -1,13 +1,16 @@
 package javaboard1031;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MemberController {
 	
-	ArrayList<Member> members = new ArrayList<>();
+	MemberDao memberDao = new MemberDao();
 	Scanner sc = new Scanner(System.in);
 	Member loginedMember = null;
+	
+	public MemberController() {
+		memberDao.init();
+	}
 	
 	public Member getLoginedMember() {
 		return this.loginedMember;
@@ -28,21 +31,11 @@ public class MemberController {
 		System.out.print("비밀번호 : ");
 		String loginPw = sc.nextLine();
 
-		boolean loginFlag = false; // 로그인 성공 여부
-		Member member = null;
-
-		for (int i = 0; i < members.size(); i++) {
-			member = members.get(i);
-			String targetId = member.getLoginId();
-			String targetPw = member.getLoginPw();
-
-			if (loginId.equals(targetId) && loginPw.equals(targetPw)) {
-				loginFlag = true;
-				break;
-			}
-		}
+		Member member = memberDao.getLoginMember(loginId, loginPw);
+		
+		
 		// 로그인 처리
-		if (loginFlag) {
+		if (member != null) {
 			loginedMember = member;
 			System.out.println(member.getNickname() + "님 반갑습니다.!");
 		} else {
@@ -61,7 +54,9 @@ public class MemberController {
 		String nick = sc.nextLine();
 
 		Member member = new Member(loginId, loginPw, nick);
-		members.add(member);
+		
+		memberDao.addMember(member);
+		
 		System.out.println("==== 회원가입이 완료되었습니다. ====");
 	}
 }
